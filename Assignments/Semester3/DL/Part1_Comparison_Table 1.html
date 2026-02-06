@@ -1,0 +1,561 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Literature Comparison Table</title>
+            <style>
+                @page {
+                    size: A4 landscape;
+                    margin: 1cm;
+                }
+                body {
+                    font-family: Arial, sans-serif;
+                    font-size: 9pt;
+                    line-height: 1.4;
+                    margin: 0;
+                    padding: 10px;
+                }
+                h1 {
+                    font-size: 18pt;
+                    color: #2c3e50;
+                    margin-bottom: 10px;
+                }
+                h2 {
+                    font-size: 14pt;
+                    color: #34495e;
+                    margin-top: 15px;
+                    margin-bottom: 8px;
+                }
+                h3 {
+                    font-size: 11pt;
+                    color: #555;
+                    margin-top: 12px;
+                    margin-bottom: 6px;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 10px 0;
+                    font-size: 7.5pt;
+                }
+                th {
+                    background-color: #3498db;
+                    color: white;
+                    padding: 6px 4px;
+                    text-align: left;
+                    font-weight: bold;
+                    border: 1px solid #2980b9;
+                }
+                td {
+                    padding: 5px 4px;
+                    border: 1px solid #bdc3c7;
+                    vertical-align: top;
+                }
+                tr:nth-child(even) {
+                    background-color: #f8f9fa;
+                }
+                strong {
+                    color: #2c3e50;
+                }
+                code {
+                    background-color: #f4f4f4;
+                    padding: 2px 4px;
+                    border-radius: 3px;
+                    font-size: 7pt;
+                }
+                hr {
+                    border: none;
+                    border-top: 2px solid #3498db;
+                    margin: 15px 0;
+                }
+                ul, ol {
+                    margin: 8px 0;
+                    padding-left: 20px;
+                    list-style-position: inside;
+                }
+                li {
+                    margin: 3px 0;
+                }
+                ol li {
+                    list-style-type: none;
+                }
+                ol li:before {
+                    content: "";
+                }
+                p {
+                    margin: 6px 0;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Assignment 02 - Part A: Literature Exploration and Comparison</h1>
+<h2>Group Information</h2>
+<p><strong>Group Number:</strong> 36</p>
+<p><strong>Group Members and BITS ID:</strong>
+1. RAVI SAJJANAR - 2024DA04008
+2. DEVATA SAI SUDHESH - 2024DA04009
+3. BANDARU HAREESHA - 2024DA04089
+4. BHAVYA ARORA - 2023DA04058</p>
+<p><strong>Domain:</strong> Real-time Language Translation</p>
+<hr />
+<h2>Comparison Table</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Criteria</strong></th>
+<th><strong>PAPER 1</strong></th>
+<th><strong>PAPER 2</strong></th>
+<th><strong>PAPER 3</strong></th>
+<th><strong>PAPER 4</strong></th>
+<th><strong>PAPER 5</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Title of the paper</strong></td>
+<td>Attention Is All You Need</td>
+<td>Sequence to Sequence Learning with Neural Networks</td>
+<td>Neural Machine Translation by Jointly Learning to Align and Translate</td>
+<td>Google's Neural Machine Translation System: Bridging the Gap between Human and Machine Translation</td>
+<td>STACL: Simultaneous Translation with Implicit Anticipation and Controllable Latency using Prefix-to-Prefix Framework</td>
+</tr>
+<tr>
+<td><strong>Authors</strong></td>
+<td>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.N., Kaiser, Ł. and Polosukhin, I.</td>
+<td>Sutskever, I., Vinyals, O. and Le, Q.V.</td>
+<td>Bahdanau, D., Cho, K. and Bengio, Y.</td>
+<td>Wu, Y., Schuster, M., Chen, Z., Le, Q.V., Norouzi, M., Macherey, W., Krikun, M., Cao, Y., Gao, Q., Macherey, K. et al.</td>
+<td>Ma, M., Huang, L., Xiong, H., Zheng, R., Liu, K., Zheng, B., Zhang, C., He, Z., Liu, H., Li, X., Wu, H. and Wang, H.</td>
+</tr>
+<tr>
+<td><strong>Year of publication</strong></td>
+<td>2017</td>
+<td>2014</td>
+<td>2015</td>
+<td>2016</td>
+<td>2019</td>
+</tr>
+<tr>
+<td><strong>Network used</strong></td>
+<td>Transformer (Self-Attention Mechanism)</td>
+<td>Deep LSTM RNN (Encoder-Decoder)</td>
+<td>RNN with Attention Mechanism (Encoder-Decoder with Alignment)</td>
+<td>Deep LSTM with Residual Connections and Attention</td>
+<td>Transformer-based with Wait-k Policy</td>
+</tr>
+<tr>
+<td><strong>Depth of the network</strong></td>
+<td>6 encoder layers and 6 decoder layers (base model); 8 attention heads per layer</td>
+<td>4 LSTM layers in encoder and 4 LSTM layers in decoder</td>
+<td>Single-layer bidirectional RNN encoder and single-layer RNN decoder with attention</td>
+<td>8 encoder layers and 8 decoder layers with residual connections</td>
+<td>Transformer architecture adapted for simultaneous translation</td>
+</tr>
+<tr>
+<td><strong>How is the network helping the overall task?</strong></td>
+<td>Transformer uses self-attention mechanisms for encoding source and decoding target language, enabling parallel processing and capturing long-range dependencies. Eliminates recurrence entirely. Used for sequence-to-sequence translation with superior efficiency.</td>
+<td>Deep LSTM encoder converts source sentence into fixed-dimensional vector representation; LSTM decoder generates target translation from this representation. Handles feature engineering and sequence-to-sequence translation through recurrent processing.</td>
+<td>Attention mechanism allows decoder to focus on relevant parts of source sentence dynamically. Solves fixed-length bottleneck problem by using context vectors that change for each target word. Enables better handling of long sequences.</td>
+<td>Deep LSTM encoder-decoder with attention mechanism handles feature extraction, sequence encoding, and translation generation. Residual connections enable training of deeper networks. Wordpiece model handles rare words. Production-optimized for real-time translation.</td>
+<td>Prefix-to-prefix framework enables translation before source sentence ends. Wait-k policy controls latency by waiting for k source words before generating translations. Balances quality and real-time constraints for streaming scenarios.</td>
+</tr>
+<tr>
+<td><strong>Loss function used</strong></td>
+<td>Cross-entropy loss with label smoothing (ε = 0.1)</td>
+<td>Negative log-likelihood (cross-entropy) on target sequences</td>
+<td>Cross-entropy loss on target sequences</td>
+<td>Cross-entropy loss with length normalization and coverage penalty</td>
+<td>Cross-entropy loss with latency penalty</td>
+</tr>
+<tr>
+<td><strong>Evaluation / Performance metric used</strong></td>
+<td>BLEU score on WMT 2014 English-to-German (28.4) and English-to-French (41.8). Training time and computational efficiency also reported.</td>
+<td>BLEU score on WMT'14 English-to-French (34.81) and WMT'14 English-to-German datasets</td>
+<td>BLEU score on WMT'14 English-to-French. Achieved 28.45 BLEU on full test set. Also includes attention alignment visualization.</td>
+<td>BLEU score on WMT English-to-French and English-to-German. Human evaluation scores comparing to human translation quality. Reported error reduction of 60% compared to phrase-based systems.</td>
+<td>BLEU score and Average Lagging (AL) metric for latency measurement on WMT datasets (English-German, English-Chinese). Quality-latency trade-off curves.</td>
+</tr>
+<tr>
+<td><strong>Name of Dataset used. If a public dataset, provide the URL.</strong></td>
+<td><strong>WMT 2014 English-German</strong> (4.5M sentence pairs)<br><strong>WMT 2014 English-French</strong> (36M sentence pairs)<br>URL: https://www.statmt.org/wmt14/translation-task.html</td>
+<td><strong>WMT'14 English-to-French</strong> (12M sentences, 348M French words, 304M English words)<br>URL: https://www.statmt.org/wmt14/translation-task.html</td>
+<td><strong>WMT'14 English-to-French</strong> translation task<br>URL: https://www.statmt.org/wmt14/translation-task.html</td>
+<td><strong>WMT English-to-French</strong> and <strong>WMT English-to-German</strong> datasets<br>URL: https://www.statmt.org/wmt14/translation-task.html</td>
+<td><strong>IWSLT datasets</strong> and <strong>WMT datasets</strong> (English-German, German-English, English-Chinese, Chinese-English)<br>URL: https://www.statmt.org/wmt14/translation-task.html</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Quantitative Performance Comparison</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Metric</strong></th>
+<th><strong>Paper 1 (Transformer)</strong></th>
+<th><strong>Paper 2 (Seq2Seq LSTM)</strong></th>
+<th><strong>Paper 3 (RNN+Attention)</strong></th>
+<th><strong>Paper 4 (Google NMT)</strong></th>
+<th><strong>Paper 5 (STACL)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BLEU Score (EN-FR)</strong></td>
+<td>41.8</td>
+<td>34.81</td>
+<td>28.45</td>
+<td>~39.92</td>
+<td>~38.5 (with latency constraint)</td>
+</tr>
+<tr>
+<td><strong>BLEU Score (EN-DE)</strong></td>
+<td>28.4</td>
+<td>Not reported</td>
+<td>Not reported</td>
+<td>Not reported</td>
+<td>~27.8 (with latency constraint)</td>
+</tr>
+<tr>
+<td><strong>Training Time</strong></td>
+<td>3.5 days (8 GPUs)</td>
+<td>Several days (slower)</td>
+<td>Moderate</td>
+<td>Days (production scale)</td>
+<td>Similar to Transformer</td>
+</tr>
+<tr>
+<td><strong>Model Parameters</strong></td>
+<td>65M (base), 213M (big)</td>
+<td>~150M (4 layers)</td>
+<td>~50M (single layer)</td>
+<td>~210M (8 layers)</td>
+<td>~65M (base)</td>
+</tr>
+<tr>
+<td><strong>Inference Speed</strong></td>
+<td>Fast (parallel)</td>
+<td>Slow (sequential)</td>
+<td>Slow (sequential)</td>
+<td>Moderate (sequential)</td>
+<td>Fast (parallel, low-latency)</td>
+</tr>
+<tr>
+<td><strong>Real-time Capability</strong></td>
+<td>High (optimized)</td>
+<td>Low</td>
+<td>Low</td>
+<td>High (production-proven)</td>
+<td>Very High (simultaneous)</td>
+</tr>
+<tr>
+<td><strong>Parallelization</strong></td>
+<td>Full (across sequence)</td>
+<td>None (sequential)</td>
+<td>None (sequential)</td>
+<td>None (sequential)</td>
+<td>Full (across sequence)</td>
+</tr>
+<tr>
+<td><strong>Max Sequence Length</strong></td>
+<td>Unlimited (positional encoding)</td>
+<td>Limited (memory)</td>
+<td>Extended (attention helps)</td>
+<td>Extended (residual connections)</td>
+<td>Unlimited (streaming)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Observations:</strong>
+- <strong>Quality:</strong> Transformer (Paper 1) achieves highest BLEU scores across benchmarks
+- <strong>Speed:</strong> Transformer and STACL enable parallel processing, significantly faster than RNN-based approaches
+- <strong>Scalability:</strong> Transformer-based models (Papers 1, 5) handle longer sequences more efficiently
+- <strong>Real-time Performance:</strong> Paper 5 specifically optimized for low-latency simultaneous translation
+- <strong>Efficiency:</strong> 20% quality improvement from 2014 to 2017 with better computational efficiency</p>
+<hr />
+<h2>Research Impact Analysis</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Impact Metric</strong></th>
+<th><strong>Paper 1</strong></th>
+<th><strong>Paper 2</strong></th>
+<th><strong>Paper 3</strong></th>
+<th><strong>Paper 4</strong></th>
+<th><strong>Paper 5</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Citation Count (approx.)</strong></td>
+<td>115,000+</td>
+<td>35,000+</td>
+<td>40,000+</td>
+<td>15,000+</td>
+<td>1,500+</td>
+</tr>
+<tr>
+<td><strong>h-index Impact</strong></td>
+<td>Extremely High</td>
+<td>Very High</td>
+<td>Very High</td>
+<td>High</td>
+<td>Growing</td>
+</tr>
+<tr>
+<td><strong>Industry Adoption</strong></td>
+<td>Universal (Google, OpenAI, Meta, Microsoft)</td>
+<td>Historical (replaced)</td>
+<td>Historical (replaced)</td>
+<td>Deployed (Google Translate 2016-2017)</td>
+<td>Research/Specialized systems</td>
+</tr>
+<tr>
+<td><strong>Academic Influence</strong></td>
+<td>Foundational for modern NLP</td>
+<td>Foundational for seq2seq</td>
+<td>Foundational for attention</td>
+<td>Production validation</td>
+<td>Real-time specialization</td>
+</tr>
+<tr>
+<td><strong>Derivative Works</strong></td>
+<td>BERT, GPT, T5, BART, mBART, etc.</td>
+<td>Influenced all seq2seq work</td>
+<td>Led to Transformers</td>
+<td>Production best practices</td>
+<td>Streaming NMT systems</td>
+</tr>
+<tr>
+<td><strong>Current Relevance (2026)</strong></td>
+<td>Active (state-of-the-art basis)</td>
+<td>Historical reference</td>
+<td>Historical reference</td>
+<td>Historical reference</td>
+<td>Growing (real-time AI)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Impact Summary:</strong></p>
+<ol>
+<li><strong>Paper 1 (Transformer):</strong> </li>
+<li>Most impactful paper in modern NLP history</li>
+<li>Enabled GPT, BERT, and entire large language model revolution</li>
+<li>Standard architecture for all major AI companies</li>
+<li>
+<p>Continues to be actively researched and extended</p>
+</li>
+<li>
+<p><strong>Papers 2 &amp; 3 (Seq2Seq &amp; Attention):</strong></p>
+</li>
+<li>Critical historical foundations</li>
+<li>Enabled the neural machine translation revolution</li>
+<li>Directly led to Paper 1's innovations</li>
+<li>
+<p>Still widely taught in academic settings</p>
+</li>
+<li>
+<p><strong>Paper 4 (Google NMT):</strong></p>
+</li>
+<li>Proved neural translation viable at production scale</li>
+<li>First real-world deployment serving billions of users</li>
+<li>Validated commercial viability of neural approaches</li>
+<li>
+<p>Established production engineering best practices</p>
+</li>
+<li>
+<p><strong>Paper 5 (STACL):</strong></p>
+</li>
+<li>Addresses emerging need for real-time AI</li>
+<li>Growing relevance for live translation, real-time captioning</li>
+<li>Active research area with practical applications</li>
+<li>Represents future direction for interactive AI systems</li>
+</ol>
+<p><strong>Real-World Applications in 2026:</strong>
+- <strong>Transformer-based (Paper 1):</strong> Google Translate, DeepL, Microsoft Translator, ChatGPT, Claude, all major LLMs
+- <strong>Simultaneous Translation (Paper 5):</strong> Live event translation, real-time video captioning, streaming interpretation services
+- <strong>Production Insights (Paper 4):</strong> Influenced deployment strategies for all major translation services</p>
+<hr />
+<h2>Detailed Paper Information</h2>
+<h3>Paper 1: Attention Is All You Need</h3>
+<ul>
+<li><strong>Conference:</strong> NeurIPS 2017 (Neural Information Processing Systems)</li>
+<li><strong>Publisher:</strong> Google Research</li>
+<li><strong>DOI/URL:</strong> https://arxiv.org/abs/1706.03762</li>
+<li><strong>Key Innovation:</strong> Introduced the Transformer architecture, replacing recurrent layers entirely with self-attention mechanisms</li>
+<li><strong>Significance:</strong> Foundational paper for modern NLP; basis for BERT, GPT, and most modern translation systems. Current industry standard for real-time translation.</li>
+</ul>
+<h3>Paper 2: Sequence to Sequence Learning with Neural Networks</h3>
+<ul>
+<li><strong>Conference:</strong> NeurIPS 2014</li>
+<li><strong>Publisher:</strong> Google</li>
+<li><strong>DOI/URL:</strong> https://arxiv.org/abs/1409.3215</li>
+<li><strong>Key Innovation:</strong> Pioneered the encoder-decoder LSTM architecture for sequence-to-sequence tasks</li>
+<li><strong>Significance:</strong> Foundational work that established neural machine translation as viable alternative to phrase-based systems. First practical end-to-end NMT system.</li>
+</ul>
+<h3>Paper 3: Neural Machine Translation by Jointly Learning to Align and Translate</h3>
+<ul>
+<li><strong>Conference:</strong> ICLR 2015 (International Conference on Learning Representations)</li>
+<li><strong>Publisher:</strong> University of Montreal</li>
+<li><strong>DOI/URL:</strong> https://arxiv.org/abs/1409.0473</li>
+<li><strong>Key Innovation:</strong> Introduced attention mechanism for neural machine translation, solving the fixed-length bottleneck problem</li>
+<li><strong>Significance:</strong> Critical bridge between RNN-based and Transformer architectures. Enabled handling of long sequences effectively.</li>
+</ul>
+<h3>Paper 4: Google's Neural Machine Translation System</h3>
+<ul>
+<li><strong>Conference:</strong> arXiv preprint (widely cited, deployed in Google Translate)</li>
+<li><strong>Publisher:</strong> Google Research</li>
+<li><strong>DOI/URL:</strong> https://arxiv.org/abs/1609.08144</li>
+<li><strong>Key Innovation:</strong> Deep LSTM with residual connections, attention mechanism, and wordpiece model for production-scale translation</li>
+<li><strong>Significance:</strong> First production-grade neural machine translation system deployed at scale. Achieved near-human translation quality in real-world application.</li>
+</ul>
+<h3>Paper 5: STACL: Simultaneous Translation</h3>
+<ul>
+<li><strong>Conference:</strong> ACL 2019 (Association for Computational Linguistics)</li>
+<li><strong>Publisher:</strong> Baidu Research</li>
+<li><strong>DOI/URL:</strong> https://arxiv.org/abs/1810.08398</li>
+<li><strong>Key Innovation:</strong> Wait-k policy and prefix-to-prefix framework for simultaneous translation with controllable latency</li>
+<li><strong>Significance:</strong> Specifically addresses real-time translation constraints for streaming scenarios. Balances quality and latency for live translation applications.</li>
+</ul>
+<hr />
+<h2>Conclusion</h2>
+<h3>Comparative Analysis</h3>
+<p>The five papers demonstrate the complete evolution and practical application of neural machine translation for real-time scenarios from 2014 to 2019:</p>
+<ol>
+<li><strong>Architecture Evolution:</strong> </li>
+<li><strong>2014 (Paper 2):</strong> Deep LSTM encoder-decoder established the foundation for neural machine translation</li>
+<li><strong>2015 (Paper 3):</strong> Attention mechanism solved the fixed-length bottleneck, enabling better long-sequence handling</li>
+<li><strong>2016 (Paper 4):</strong> Production deployment with deep LSTM + attention + residual connections achieved near-human quality</li>
+<li><strong>2017 (Paper 1):</strong> Transformer architecture eliminated recurrence entirely, enabling parallel processing</li>
+<li>
+<p><strong>2019 (Paper 5):</strong> Specialized simultaneous translation addressed true real-time constraints with controllable latency</p>
+</li>
+<li>
+<p><strong>Performance Improvements:</strong> 
+   BLEU scores on English-to-French translation improved dramatically:</p>
+</li>
+<li>Paper 2 (2014): 34.81 BLEU</li>
+<li>Paper 4 (2016): ~39.92 BLEU (production system)</li>
+<li>
+<p>Paper 1 (2017): 41.8 BLEU
+   This represents over 20% relative improvement in translation quality over 3 years.</p>
+</li>
+<li>
+<p><strong>Computational Efficiency:</strong> </p>
+</li>
+<li>Papers 2, 3, 4 used sequential RNN/LSTM processing (slow, hours/days of training)</li>
+<li>Paper 1 (Transformer) enables parallel processing, reducing training time significantly</li>
+<li>
+<p>Paper 5 optimizes for low-latency inference in streaming scenarios</p>
+</li>
+<li>
+<p><strong>Real-time Applicability:</strong> </p>
+</li>
+<li>Paper 2: Foundation but not real-time optimized</li>
+<li>Paper 3: Attention improved quality but still sequential</li>
+<li>Paper 4: First production-scale real-time system (Google Translate)</li>
+<li>Paper 1: Current backbone for modern real-time systems (faster inference than RNNs)</li>
+<li>
+<p>Paper 5: Explicitly designed for simultaneous translation with quality-latency trade-offs</p>
+</li>
+<li>
+<p><strong>Network Diversity:</strong></p>
+</li>
+<li>RNN/LSTM-based: Papers 2, 3, 4</li>
+<li>Transformer-based: Papers 1, 5
+   This selection covers both major architectural paradigms as required by the assignment.</li>
+</ol>
+<h3>Justification for Implementation Choice</h3>
+<p><strong>Selected Paper for Part B Implementation: Paper 1 - "Attention Is All You Need"</strong></p>
+<p><strong>Justification:</strong></p>
+<ol>
+<li>
+<p><strong>State-of-the-Art Performance:</strong> 
+   Achieves the highest BLEU scores (41.8 on English-to-French) and remains the foundation for current state-of-the-art translation systems in 2026.</p>
+</li>
+<li>
+<p><strong>Industry Standard:</strong> 
+   Transformers are the de facto standard in NLP and translation. All major real-time translation services (Google Translate, DeepL, Microsoft Translator) use Transformer-based architectures.</p>
+</li>
+<li>
+<p><strong>Superior for Real-time Translation:</strong> 
+   Parallel processing capability makes it faster than sequential RNN/LSTM models for both training and inference, critical for real-time applications.</p>
+</li>
+<li>
+<p><strong>Technical Feasibility for Implementation:</strong></p>
+</li>
+<li>Native TensorFlow/Keras support with <code>tf.keras.layers.MultiHeadAttention</code></li>
+<li>Well-documented architecture with clear specifications</li>
+<li>Can implement simplified version (2-4 layers) for faster training</li>
+<li>
+<p>Extensive tutorials and reference implementations available</p>
+</li>
+<li>
+<p><strong>Dataset Availability:</strong></p>
+</li>
+<li>WMT datasets publicly available with clear URLs</li>
+<li>Can use smaller subsets (Multi30k with 31K pairs) for faster experimentation</li>
+<li>
+<p>Same datasets work across all papers for fair comparison</p>
+</li>
+<li>
+<p><strong>Educational Value:</strong> 
+   Understanding Transformers is essential for modern deep learning. The attention mechanism is fundamental across multiple domains beyond translation (vision, speech, multimodal AI).</p>
+</li>
+<li>
+<p><strong>Implementation Resources:</strong></p>
+</li>
+<li>Abundant code examples and tutorials</li>
+<li>Strong community support</li>
+<li>Pre-trained models available for transfer learning if needed</li>
+<li>
+<p>Better debugging tools and visualization capabilities</p>
+</li>
+<li>
+<p><strong>Assignment Requirements Alignment:</strong></p>
+</li>
+<li>Clear architecture to report (layers, attention heads, parameters)</li>
+<li>Trainable model with measurable metrics (loss, accuracy, BLEU)</li>
+<li>Generates all required outputs (training/validation curves, performance metrics)</li>
+<li>Confusion matrix can be adapted for token-level accuracy</li>
+</ol>
+<p><strong>Why Not Other Papers:</strong>
+- <strong>Paper 2:</strong> Historical significance but outdated; LSTM training is slower and less efficient
+- <strong>Paper 3:</strong> Simpler than Transformer but still sequential; lower performance ceiling
+- <strong>Paper 4:</strong> Production system complexity (8 layers + residual connections) harder to implement; similar constraints as Paper 3
+- <strong>Paper 5:</strong> Most recent but more complex (simultaneous translation policy); fewer implementation resources; harder to evaluate latency constraints in academic setting</p>
+<p><strong>Conclusion:</strong> Paper 1 (Transformer) offers the optimal balance of performance, feasibility, learning value, and alignment with both the "real-time translation" domain and Part B implementation requirements.</p>
+<hr />
+<h2>References</h2>
+<ol>
+<li>
+<p>Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A.N., Kaiser, Ł. and Polosukhin, I., 2017. Attention is all you need. Advances in neural information processing systems, 30.</p>
+</li>
+<li>
+<p>Sutskever, I., Vinyals, O. and Le, Q.V., 2014. Sequence to sequence learning with neural networks. Advances in neural information processing systems, 27.</p>
+</li>
+<li>
+<p>Bahdanau, D., Cho, K. and Bengio, Y., 2015. Neural machine translation by jointly learning to align and translate. International Conference on Learning Representations (ICLR).</p>
+</li>
+<li>
+<p>Wu, Y., Schuster, M., Chen, Z., Le, Q.V., Norouzi, M., Macherey, W., Krikun, M., Cao, Y., Gao, Q., Macherey, K. and Klingner, J., 2016. Google's neural machine translation system: Bridging the gap between human and machine translation. arXiv preprint arXiv:1609.08144.</p>
+</li>
+<li>
+<p>Ma, M., Huang, L., Xiong, H., Zheng, R., Liu, K., Zheng, B., Zhang, C., He, Z., Liu, H., Li, X., Wu, H. and Wang, H., 2019. STACL: Simultaneous translation with implicit anticipation and controllable latency using prefix-to-prefix framework. Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics, pp.3754-3764.</p>
+</li>
+</ol>
+<hr />
+<h2>Paper Download Links</h2>
+<ol>
+<li><strong>Paper 1:</strong> https://arxiv.org/pdf/1706.03762.pdf (Attention Is All You Need)</li>
+<li><strong>Paper 2:</strong> https://arxiv.org/pdf/1409.3215.pdf (Sequence to Sequence Learning)</li>
+<li><strong>Paper 3:</strong> https://arxiv.org/pdf/1409.0473.pdf (Neural Machine Translation with Attention)</li>
+<li><strong>Paper 4:</strong> https://arxiv.org/pdf/1609.08144.pdf (Google's Neural Machine Translation System)</li>
+<li><strong>Paper 5:</strong> https://arxiv.org/pdf/1810.08398.pdf (STACL: Simultaneous Translation)</li>
+</ol>
+<p><strong>Document prepared by Group 36</strong><br />
+<strong>Date:</strong> January 31, 2026<br />
+<strong>Assignment:</strong> Deep Learning Assignment 02 - Part A</p>
+        </body>
+        </html>
+        
