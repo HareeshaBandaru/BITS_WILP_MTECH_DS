@@ -313,3 +313,12 @@ pip install openai sentence-transformers
 - **Logprobs**: Currently `None` in dry-run; captured from API when available
 - **Grounding**: Computed via keyword overlap between response and retrieved policies
 - **Database**: Auto-creates schema on first run
+
+
+**API:**
+Run the Flask API for real-time ingestion:
+```bash
+export FLASK_APP=api.py
+python3 -m flask run --host=0.0.0.0 --port=5000
+```
+Endpoint: `POST /chat` accepts JSON `{messages, issue_type, persona, dry_run}`

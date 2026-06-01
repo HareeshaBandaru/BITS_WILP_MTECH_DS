@@ -72,15 +72,19 @@ def run_real_time_pipeline(
                     # Add customer message to history
                     messages.append({"role": "user", "content": customer_msg})
 
-                    # Stream LLM response
+                    # Stream LLM response and validate it immediately
                     chat_data = processor.process_chat(
                         chat_id=chat_id,
                         messages=messages,
                         issue_type=issue_type,
                         persona=persona,
+                        turn_index=turn_idx,
                     )
 
-                    # Save to database (only on last turn)
+                    # Save response-level validation for every assistant turn
+                    processor.save_response_check(chat_data)
+
+                    # Save full chat only after the final turn
                     if turn_idx == len(customer_turns) - 1:
                         processor.save_chat_to_db(chat_data)
 

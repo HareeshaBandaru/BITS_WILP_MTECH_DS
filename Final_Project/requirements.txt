@@ -1,0 +1,10 @@
+flask
+openai
+sentence-transformers
+xgboost
+shap
+scikit-learn
+numpy
+pandas
+requests
+streamlit

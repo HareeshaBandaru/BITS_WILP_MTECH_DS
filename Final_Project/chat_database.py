@@ -78,6 +78,23 @@ class ChatDatabase:
             )
         """)
 
+        # Response checks: validate each assistant response immediately
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS response_checks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                chat_id INTEGER NOT NULL,
+                turn_index INTEGER NOT NULL,
+                response_text TEXT,
+                grounding_score REAL,
+                hallucinated INTEGER,
+                retrieved_doc_keys TEXT,
+                token_count INTEGER,
+                prompt_refreshed INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (chat_id) REFERENCES chats(chat_id)
+            )
+        """)
+
         # Predictions table: model predictions and inference results
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS predictions (
@@ -151,6 +168,28 @@ class ChatDatabase:
 
         self.conn.commit()
         return chat_id
+
+    def insert_response_check(self, response_data: Dict) -> int:
+        """Insert a response-level validation record for a chat turn."""
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            INSERT INTO response_checks (
+                chat_id, turn_index, response_text,
+                grounding_score, hallucinated, retrieved_doc_keys,
+                token_count, prompt_refreshed
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            response_data.get("chat_id"),
+            response_data.get("turn_index"),
+            response_data.get("response_text"),
+            response_data.get("grounding_score"),
+            response_data.get("hallucinated"),
+            ",".join(response_data.get("retrieved_doc_keys", [])),
+            response_data.get("token_count"),
+            1 if response_data.get("prompt_refreshed") else 0,
+        ))
+        self.conn.commit()
+        return cursor.lastrowid
 
     def get_chat_transcript(self, chat_id: int) -> Optional[List[Dict]]:
         """Get full conversation transcript for a chat."""
