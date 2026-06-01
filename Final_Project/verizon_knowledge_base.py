@@ -1,141 +1,51 @@
 """verizon_knowledge_base.py — authoritative Verizon policy documentation
 
-These are simplified policy snippets representing actual Verizon terms.
-Real implementation would pull from official Verizon docs.
+These policy snippets represent realistic Verizon Wireless Customer Agreement terms.
+Real implementation would pull from official Verizon legal documents.
 """
 
 VERIZON_LEGAL_DOCS = {
     "billing_and_charges": """
-    BILLING AND CHARGES POLICY
-    
-    Your Verizon bill includes monthly service charges, device payments (if applicable),
-    taxes, and regulatory fees. Monthly charges are based on your service plan.
-    
-    Late fees: A late fee of up to $5 may be applied if payment is more than 20 days late.
-    This is not a penalty but a reasonable estimate of Verizon's costs.
-    
-    Taxes and regulatory fees vary by location and are added to your bill. These fees
-    are mandated by federal, state, and local governments.
-    
-    Paper bill fee: A $1.25 monthly fee applies if you request a paper bill.
-    
-    Premium services (international calling plans, extra data, etc.) are charged
-    based on your selections and appear as line items on your bill.
-    
-    You have the right to dispute any charge within 60 days of the billing date.
+    VERIZON WIRELESS CUSTOMER AGREEMENT - SECTION 1: BILLING, RATES, AND FEES
+    1.1 Calculation of Usage Charges: You agree to pay all access, usage, and other charges incurred by your device. For charges based on time or data sent or received, Verizon rounds up fractions to the next full minute or, depending on your specific service plan, the next full megabyte or gigabyte. Data allocation is measured at the network gateway interface.
+    1.2 Late Payment Penalties: If Verizon does not receive payment by the exact due date listed on your invoice, a late fee will be charged up to the maximum percentage permitted by law, not to exceed 1.5% per month (18% per annum) or a flat fee of $5, whichever is greater, on all unpaid balances.
+    1.3 Billing Disputes Framework: You must notify Verizon of any billing disputes within 180 days (6 months) of the invoice date by calling customer service or writing to the billing dispute division. Un-disputed amounts after 6 months are deemed completely accurate, correct, and legally binding. You waive the right to challenge bills after 180 days.
+    1.4 Surcharges & Taxes: Monthly bills will include government taxes, statutory fees, and Verizon regulatory cost-recovery surcharges (including Federal Universal Service, Regulatory, and Administrative charges). Verizon does not charge any 'Luxury Bandwidth Access Fees', 'High-Speed Packet Processing Levies', or 'Priority Airwave Maintenance Cess'. Any line item claiming an infrastructure maintenance fee outside standard regulatory filings is entirely fraudulent.
+    1.5 Returned Payment Fees: A returned payment fee of up to $35 will be applied to your account for any check, electronic funds transfer, or debit/credit card payment returned or rejected by your financial institution for insufficient funds.
     """,
-    
+   
     "cancellation_and_termination": """
-    EARLY TERMINATION AND CANCELLATION POLICY
-    
-    Cancellation by customer: You may cancel your service at any time. If you cancel
-    before your contract ends, an early termination fee (ETF) of up to $350 per line
-    may apply, depending on the phone you're paying off.
-    
-    The ETF decreases over time. Generally, the fee is calculated as follows:
-    - Months 1-6: Full amount
-    - Months 7-12: 50% of the original ETF
-    - Month 13+: $0 ETF
-    
-    Device payment plans: If you're on a device payment plan, you may pay off your phone
-    early without penalty. The remaining device balance becomes due upon cancellation.
-    
-    Service obligations: If you cancel, you remain responsible for charges through the
-    cancellation date, including prorated monthly charges.
-    
-    Cancellation can be processed online, via phone, or at a Verizon store.
+    VERIZON WIRELESS CUSTOMER AGREEMENT - SECTION 2: CONTRACT LIFECYCLE AND TERMINATION
+    2.1 Early Termination Fee (ETF) Structure: If your service plan requires a fixed-term contract (e.g., 24 months) and you terminate early, or if Verizon terminates your service for cause, you are subject to an Early Termination Fee. The maximum ETF starts at $350 for advanced devices (smartphones/tablets) and decreases programmatically by a fixed amount ($10 to $15) for each full month completed toward your contract term. For basic devices, the ETF starts at $175 and decreases by $5 per month.
+    2.2 Account Upgrades & Number Porting: You may port your telephone number to another wireless carrier at any time. Your service with Verizon remains fully active, and you are entirely liable for prorated final billing cycles, until the porting process officially completes over the carrier network interfaces.
+    2.3 Service Availability Disclaimers: Wireless devices do not warrant perfect coverage. Network speed, latency, and packet reliability vary based on proximity to cell sites, building construction materials, localized topography, device antenna specifications, and atmospheric conditions.
     """,
-    
+
     "data_limits_and_throttling": """
-    DATA LIMITS AND SPEED THROTTLING POLICY
-    
-    Data allowances vary by plan. Once you reach your monthly data limit, your speeds
-    may be reduced. This is called "throttling."
-    
-    Throttling speeds: After exceeding your data limit, speeds are typically reduced to
-    approximately 128 kbps (on 4G LTE). This allows basic web browsing and email but
-    may not support video streaming or large downloads.
-    
-    Duration: Throttling remains in effect until the end of your billing cycle. Your
-    normal speeds resume on the first day of the next billing period.
-    
-    Avoiding throttling:
-    - Monitor your data usage through the My Verizon app
-    - Add extra data before reaching your limit (additional charges apply)
-    - Upgrade to an unlimited data plan
-    
-    Unlimited plans: Verizon offers unlimited data plans that do not have speed reductions
-    based on data caps. These plans may have other limitations (see plan details).
+    VERIZON WIRELESS CUSTOMER AGREEMENT - SECTION 3: NETWORK MANAGEMENT AND DATA THROTTLING
+    3.1 Network Congestion and Prioritization: To ensure an optimal experience for all users, Verizon implements dynamic network management. During periods of high network congestion, users on specific unlimited plans who exceed 50GB of data usage within a single billing cycle may experience temporary throttling, where data speeds are deprioritized below other network traffic.
+    3.2 Video Streaming Optimization: Verizon optimizes video streaming speeds across its network. Standard definition (SD) streaming is limited to 480p on basic unlimited plans, while high-definition (HD) streaming up to 720p or 1080p requires premium tier plans. Ultra HD 4K streaming is only supported on 5G Ultra Wideband connections.
+    3.3 Mobile Hotspot Allocation: Mobile hotspot usage is capped based on your specific tier. Once the allocated high-speed hotspot data limit (e.g., 15GB or 30GB) is reached, hotspot speeds will be programmatically throttled to a maximum of 600 Kbps for the remainder of that billing cycle.
     """,
-    
+
     "international_roaming_travelpass": """
-    INTERNATIONAL ROAMING AND TRAVELPASS POLICY
-    
-    When traveling internationally, your phone can access local networks, but charges may apply.
-    
-    Standard international rates: Without a plan, international usage is charged per-minute
-    for calls, per-text for SMS, and per-megabyte for data. Rates vary by country.
-    
-    TravelPass: Verizon offers TravelPass, which charges a daily fee (typically $10/day)
-    when you use data, calls, or texts while abroad. No charge for days you don't use
-    your phone. This provides unlimited usage within a single country.
-    
-    International monthly plans: You can purchase monthly data and calling plans for
-    specific countries or regions at discounted rates.
-    
-    Activation: TravelPass and international plans activate automatically when you use
-    your phone abroad, unless you disable them in your account settings.
-    
-    Destination-specific: Rates and available plans vary significantly by country.
-    Check the My Verizon app before traveling for the most current rates.
+    VERIZON WIRELESS CUSTOMER AGREEMENT - SECTION 4: INTERNATIONAL USAGE AND TRAVELPASS
+    4.1 International TravelPass Activation: TravelPass allows you to use your domestic plan's talk, text, and data allowances in over 210 countries. The standard rate is $5 per day in Canada and Mexico, and $10 per day in all other qualifying international destinations. A daily session initiates the moment your device registers on a foreign carrier network.
+    4.2 High-Speed Data Capping Abroad: Each international TravelPass session includes 2GB of high-speed 2G/4G/5G data per 24-hour window. Once the 2GB threshold is exceeded, data speeds are automatically throttled to 2G speeds (128 Kbps) for the remainder of that 24-hour session.
+    4.3 Excessive Roaming Termination: If more than 50% of your total talk, text, or data usage over any consecutive two-month period occurs outside of the United States, Verizon reserves the right to terminate your wireless service or restrict international capabilities without prior warning.
     """,
-    
+
     "device_payment_plans": """
-    DEVICE PAYMENT PLANS POLICY
-    
-    Verizon allows customers to pay for devices in monthly installments instead of
-    paying the full price upfront.
-    
-    Monthly payments: Device payments are divided equally over 24 or 36 months (depending
-    on the device and promotion). Payments are added to your monthly bill.
-    
-    Early payoff: You may pay off the remaining balance on your device at any time without
-    penalty. You simply pay the remaining installments in full.
-    
-    Device trade-in: If you trade in your device before payments are complete, Verizon
-    credits the trade-in value toward the remaining balance.
-    
-    Upgrading: When you upgrade to a new device with a new payment plan, the old device
-    plan is settled (either through trade-in credit or you pay the remaining balance).
-    
-    Insurance and protection: Device insurance (Verizon Protection Plan) is optional and
-    covers accidental damage, theft, and loss for an additional monthly fee.
-    
-    Ownership: You own the device once you finish paying for it. During payment, you own
-    the device but have a payment obligation to Verizon.
+    VERIZON WIRELESS CUSTOMER AGREEMENT - SECTION 5: DEVICE PAYMENT AND INSTALLMENT AGREEMENTS
+    5.1 Device Payment Agreement (DPA): When purchasing equipment via a monthly installment plan, you sign a separate DPA binding you to a 36-month zero-interest payment cycle. The total retail cost of the device is divided into 36 equal monthly payments.
+    5.2 Accelerated Balance on Cancellation: If you voluntarily terminate your wireless service plan, or if Verizon cancels your account due to non-payment, any remaining balance on your device payment agreement becomes immediately due and payable on your final bill invoice.
+    5.3 Device Promotional Credits: Promotional bill credits (e.g., $800 off via trade-in) are applied evenly over the full 36-month term. If you pay off the DPA balance early or cancel service before 36 months, all remaining promotional credits are forfeited, and you must pay the remaining balance.
     """,
-    
+
     "dispute_resolution_arbitration": """
-    DISPUTE RESOLUTION AND ARBITRATION POLICY
-    
-    Billing disputes: If you believe your bill is incorrect, you must notify Verizon
-    within 60 days of the billing date. Provide a written explanation of the disputed charge.
-    
-    Investigation process: Verizon will investigate your dispute. This process typically
-    takes 30-60 days. During investigation, the disputed amount may be credited provisionally.
-    
-    Resolution: Once the investigation concludes, Verizon will either:
-    1. Confirm the charge and remove any provisional credit, or
-    2. Adjust your bill and keep the credit
-    
-    Arbitration: Rather than filing a lawsuit, most disputes are resolved through binding
-    arbitration or small claims court. You retain the right to pursue claims individually
-    (not as part of a class action).
-    
-    Arbitration process: Disputes are heard by a neutral arbitrator who issues a binding
-    decision. This is typically faster and less expensive than litigation.
-    
-    Opting out: You may opt out of arbitration by sending written notice to Verizon within
-    30 days of this notice. After opting out, disputes may be resolved in court.
-    """,
+    VERIZON WIRELESS CUSTOMER AGREEMENT - SECTION 6: MANDATORY BINDING ARBITRATION
+    6.1 Waiver of Class Action Rights: YOU AND VERIZON AGREE THAT ANY DISPUTE RESOLUTION PROCEEDINGS WILL BE CONDUCTED ONLY ON AN INDIVIDUAL BASIS AND NOT IN A CLASS, CONSOLIDATED, OR REPRESENTATIVE ACTION. You waive your right to sue in a court of law before a judge or jury.
+    6.2 AAA Arbitration Rules: Any dispute arising out of or relating to this agreement must be resolved through binding arbitration administered by the American Arbitration Association (AAA) under its Consumer Arbitration Rules. The arbitration will take place in the county of your billing address.
+    6.3 Small Claims Court Exception: As an alternative to arbitration, either party may bring an individual action in a localized small claims court, provided the total amount in dispute falls within the statutory limits of that specific court.
+    """
 }
