@@ -1,0 +1,6 @@
+
+| Capability | Out-of-the-Box LivePerson | Your M.Tech TreeSHAP Project |
+| :--- | :--- | :--- |
+| **Detection Signal** | Semantic text matching or a separate, slow "judge" prompt. | **In-flight mathematical telemetry** (Rolling token logprobs, entropy spikes, and delta drops). |
+| **Explainability** | Binary choice: "Safe" vs. "Unsafe" based on a rigid filter threshold. | **TreeSHAP feature force plots** calculating precisely how much an entropy spike vs. a regulatory flag drove the escalation score. |
+| **Churn Connection** | Treats hallucination and customer churn as two separate problems. | Treats compliance violation and token confusion as **direct, mathematically weighted catalysts** for predictive attrition. |
