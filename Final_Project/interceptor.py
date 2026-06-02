@@ -207,7 +207,12 @@ class InterceptionEngine:
         return features
 
     def should_intercept(self) -> bool:
-        return self.last_risk is not None and self.last_risk >= self.threshold
+        return (
+            self.last_risk is not None
+            and self.last_risk >= self.threshold
+            and self.last_features is not None
+            and self.last_features.get("token_count", 0) >= 3
+        )
 
     def get_risk(self) -> float:
         return float(self.last_risk) if self.last_risk is not None else 0.0

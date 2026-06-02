@@ -8,3 +8,5 @@ numpy
 pandas
 requests
 streamlit
+transformers
+torch

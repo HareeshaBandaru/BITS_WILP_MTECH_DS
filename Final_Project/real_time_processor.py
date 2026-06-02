@@ -9,7 +9,9 @@ Real-time pipeline:
 """
 
 import os
+import re
 import sys
+import random
 from typing import Dict, List, Tuple
 import json
 
@@ -18,6 +20,12 @@ try:
     HAS_OPENAI = True
 except Exception:
     HAS_OPENAI = False
+
+try:
+    from transformers import pipeline
+    HAS_TRANSFORMERS = True
+except Exception:
+    HAS_TRANSFORMERS = False
 
 from chat_database import ChatDatabase
 from retrieval import HybridRetriever
@@ -34,11 +42,24 @@ class RealTimeProcessor:
         self.interceptor = InterceptionEngine(threshold=0.8, window_size=4)
         self.dry_run = dry_run
         self.client = None
-        
-        if HAS_OPENAI and not dry_run:
+        self.local_model = None
+        self.llm_source = "simulated"
+
+        if not dry_run:
             api_key = os.environ.get("OPENAI_API_KEY")
-            if api_key:
+            prefer_local = os.environ.get("PREFER_LOCAL_LLM", "false").lower() in {"1", "true", "yes"}
+
+            if prefer_local and HAS_TRANSFORMERS:
+                self.local_model = self._load_local_llm()
+                if self.local_model:
+                    self.llm_source = "local_model"
+            elif HAS_OPENAI and api_key:
                 self.client = OpenAI(api_key=api_key)
+                self.llm_source = "openai"
+            elif HAS_TRANSFORMERS:
+                self.local_model = self._load_local_llm()
+                if self.local_model:
+                    self.llm_source = "local_model"
 
     def process_chat(
         self,
@@ -61,6 +82,8 @@ Be accurate, polite, and grounded in the real policies. {context}"""
 
         # Stream response from LLM and intercept per-token risk
         response_text, tokens_with_logprobs, intercept_info = self._stream_llm_response(full_messages)
+        initial_response_text = response_text
+        initial_tokens = tokens_with_logprobs
 
         # Get context from last customer message for retrieval
         last_customer_msg = next(
@@ -82,6 +105,7 @@ Be accurate, polite, and grounded in the real policies. {context}"""
         interception_risk = intercept_info.get("risk", 0.0)
         interception_explanation = intercept_info.get("shap", {})
         interception_position = intercept_info.get("position", None)
+        prompt_refresh_reason = None
 
         refreshed_response_text = response_text
         refreshed_tokens = tokens_with_logprobs
@@ -91,6 +115,7 @@ Be accurate, polite, and grounded in the real policies. {context}"""
 
         if intercepted or grounding_score < 0.4:
             prompt_refreshed = True
+            prompt_refresh_reason = "interception" if intercepted else "low grounding"
             (refreshed_response_text,
              refreshed_tokens,
              refreshed_grounding,
@@ -98,6 +123,12 @@ Be accurate, polite, and grounded in the real policies. {context}"""
              refreshed_docs) = self._refresh_response(
                 messages, retrieved_docs, issue_type, persona
             )
+
+        agent_transfer = False
+        if prompt_refreshed and refreshed_hallucinated == 1:
+            agent_transfer = True
+        elif intercepted and interception_risk >= 0.95:
+            agent_transfer = True
 
         # Prepare chat data for database
         chat_data = {
@@ -107,6 +138,10 @@ Be accurate, polite, and grounded in the real policies. {context}"""
             "intent": issue_type,
             "customer_persona": persona,
             "conversation": messages + [{"role": "assistant", "content": refreshed_response_text}],
+            "initial_response_text": initial_response_text,
+            "initial_grounding_score": round(grounding_score, 3),
+            "initial_hallucinated": hallucinated,
+            "initial_tokens": initial_tokens,
             "grounding_score": round(refreshed_grounding, 3),
             "hallucinated": refreshed_hallucinated,
             "retrieved_doc_keys": [doc_key for doc_key, _, _ in refreshed_docs],
@@ -114,10 +149,13 @@ Be accurate, polite, and grounded in the real policies. {context}"""
             "token_count": len(refreshed_tokens),
             "tokens": refreshed_tokens,
             "prompt_refreshed": prompt_refreshed,
+            "prompt_refresh_reason": prompt_refresh_reason,
             "intercepted": intercepted,
             "interception_risk": round(interception_risk, 3),
             "interception_explanation": interception_explanation,
             "interception_position": interception_position,
+            "agent_transfer": agent_transfer,
+            "llm_source": self.llm_source,
         }
 
         return chat_data
@@ -134,15 +172,41 @@ Be accurate, polite, and grounded in the real policies. {context}"""
 
         self.interceptor.reset()
 
-        if self.dry_run or not self.client:
+        if self.dry_run:
             # Simulated streaming response
-            text = "Thank you for reaching out. Based on our policies, I can help clarify that. Please allow me to review your account details and provide accurate information."
+            text = self._generate_dry_run_response(messages)
             tokens = text.split()
             tokens_with_logprobs = []
             full_text = ""
             for i, t in enumerate(tokens):
                 full_text += (" " if i > 0 else "") + t
-                features = self.interceptor.append_token(t, None)
+                logprob = random.uniform(-1.5, -0.7)
+                self.interceptor.append_token(t, logprob)
+                risk = self.interceptor.get_risk()
+                tokens_with_logprobs.append({
+                    "token_position": i + 1,
+                    "token": t,
+                    "logprob": logprob,
+                    "risk": risk,
+                })
+                if self.interceptor.should_intercept() and not intercept_info["intercepted"]:
+                    intercept_info["intercepted"] = True
+                    intercept_info["risk"] = risk
+                    intercept_info["shap"] = self.interceptor.get_shap()
+                    intercept_info["position"] = i + 1
+                    break
+
+            self.llm_source = "simulated"
+            return full_text, tokens_with_logprobs, intercept_info
+        elif self.local_model and not self.client:
+            prompt = self._build_local_prompt(messages)
+            text = self._generate_local_model_response(prompt)
+            tokens = text.split()
+            tokens_with_logprobs = []
+            full_text = ""
+            for i, t in enumerate(tokens):
+                full_text += (" " if i > 0 else "") + t
+                self.interceptor.append_token(t, None)
                 risk = self.interceptor.get_risk()
                 tokens_with_logprobs.append({
                     "token_position": i + 1,
@@ -157,9 +221,9 @@ Be accurate, polite, and grounded in the real policies. {context}"""
                     intercept_info["position"] = i + 1
                     break
 
+            self.llm_source = "local_model"
             return full_text, tokens_with_logprobs, intercept_info
-
-        try:
+        elif self.client:
             full_text = ""
             tokens_list = []
             token_position = 0
@@ -187,7 +251,7 @@ Be accurate, polite, and grounded in the real policies. {context}"""
                     ):
                         logprob = chunk.choices[0].logprobs.content[0].logprob
 
-                    features = self.interceptor.append_token(token_text, logprob)
+                    self.interceptor.append_token(token_text, logprob)
                     risk = self.interceptor.get_risk()
                     tokens_list.append({
                         "token_position": token_position,
@@ -205,27 +269,116 @@ Be accurate, polite, and grounded in the real policies. {context}"""
                         break
 
             return full_text, tokens_list, intercept_info
-
-        except Exception as e:
-            print(f"LLM streaming failed: {e}")
-            text = "I apologize, but I'm unable to retrieve that information at the moment."
+        else:
+            self.llm_source = "simulated"
+            text = self._generate_dry_run_response(messages)
             tokens = text.split()
             tokens_with_logprobs = []
+            full_text = ""
             for i, t in enumerate(tokens):
-                features = self.interceptor.append_token(t, None)
+                full_text += (" " if i > 0 else "") + t
+                logprob = random.uniform(-1.5, -0.7)
+                self.interceptor.append_token(t, logprob)
                 risk = self.interceptor.get_risk()
                 tokens_with_logprobs.append({
                     "token_position": i + 1,
                     "token": t,
-                    "logprob": None,
+                    "logprob": logprob,
                     "risk": risk,
                 })
-            return text, tokens_with_logprobs, intercept_info
+                if self.interceptor.should_intercept() and not intercept_info["intercepted"]:
+                    intercept_info["intercepted"] = True
+                    intercept_info["risk"] = risk
+                    intercept_info["shap"] = self.interceptor.get_shap()
+                    intercept_info["position"] = i + 1
+                    break
+
+            return full_text, tokens_with_logprobs, intercept_info
+
+    def _load_local_llm(self):
+        model_name = os.environ.get("LOCAL_LLM_MODEL", "google/flan-t5-small")
+        try:
+            return pipeline("text2text-generation", model=model_name)
+        except Exception as e:
+            print(f"Failed to load local model {model_name}: {e}")
+            return None
+
+    def _build_local_prompt(self, messages: List[Dict]) -> str:
+        prompt = "You are a helpful Verizon customer support representative. Answer accurately and politely using available policy context.\n\n"
+        for msg in messages:
+            if msg["role"] == "system":
+                prompt += msg["content"].strip() + "\n\n"
+            elif msg["role"] == "user":
+                prompt += f"Customer: {msg['content'].strip()}\n"
+            elif msg["role"] == "assistant":
+                prompt += f"Assistant: {msg['content'].strip()}\n"
+        prompt += "Assistant:"
+        return prompt
+
+    def _generate_local_model_response(self, prompt: str) -> str:
+        result = self.local_model(prompt, max_length=180, do_sample=True, top_p=0.9, temperature=0.7)
+        if isinstance(result, list) and result:
+            return str(result[0].get("generated_text", "")).strip()
+        if isinstance(result, dict):
+            return str(result.get("generated_text", "")).strip()
+        return str(result).strip()
 
     def _compute_grounding(self, response_text: str, retrieved_docs) -> float:
         """Compute how well response is grounded in retrieved policy docs."""
         from retrieval import compute_grounding_score
-        return compute_grounding_score(response_text, retrieved_docs)
+        stripped_response = self._strip_greeting_and_preamble(response_text)
+        return compute_grounding_score(stripped_response, retrieved_docs)
+
+    def _generate_dry_run_response(self, messages: List[Dict]) -> str:
+        """Generate a canned dry-run response tailored to the last customer message."""
+        last_customer = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
+        lower = last_customer.lower()
+        if "europe" in lower or "international" in lower or "roam" in lower:
+            return (
+                "If you travel to Europe, roaming charges depend on your international plan. "
+                "Check whether your line has an international travel pass to avoid per-minute and data fees. "
+                "If you do not already have a roaming package, I recommend adding one before you depart."
+            )
+        if "pay off" in lower or "remaining balance" in lower or "device payment" in lower:
+            return (
+                "You can pay off your device balance at any time. "
+                "The final amount will include any remaining installments and may also account for applicable taxes. "
+                "Please review your device payment plan in My Verizon for the exact payoff amount."
+            )
+        if "cancel" in lower or "leave" in lower or "switch providers" in lower:
+            return (
+                "If you cancel service early, you may be responsible for any remaining device balance and early termination charges. "
+                "Your final bill will include any prorated service charges through your cancellation date."
+            )
+        if "slow" in lower or "speed" in lower or "throttle" in lower:
+            return (
+                "Slow speeds usually happen when your plan reaches data thresholds or network congestion occurs. "
+                "Check your current data usage and your plan's high-speed data allowance, and consider upgrading if needed."
+            )
+        if "charge" in lower or "billing" in lower or "dispute" in lower:
+            return (
+                "Billing questions are handled by reviewing the specific charge and your account activity. "
+                "If a charge looks incorrect, please submit a dispute through your My Verizon account or ask a support agent to investigate it."
+            )
+        if "how are you" in lower or "how's it going" in lower or "what's up" in lower or "how are things" in lower:
+            return (
+                "I'm doing well, thank you for asking. "
+                "I'm here to help with your Verizon account or service question. "
+                "What can I assist you with today?"
+            )
+        return (
+            "I can help with that. Please tell me a few more details about your account or the specific issue you are seeing."
+        )
+
+    def _strip_greeting_and_preamble(self, response_text: str) -> str:
+        """Remove polite greetings and introductory boilerplate before grounding evaluation."""
+        cleaned = re.sub(
+            r'^(?:\s*(?:thank you(?: for reaching out)?|thanks(?: for reaching out)?|hello|hi|good (?:morning|afternoon|evening)|please allow me to review your account details(?: and provide accurate information)?|please allow me to review your account and provide accurate information|i appreciate your question)[\.!?,]*\s*)+',
+            "",
+            response_text,
+            flags=re.IGNORECASE,
+        )
+        return cleaned.strip() or response_text
 
     def save_chat_to_db(self, chat_data: Dict) -> None:
         """Save processed chat to database."""
@@ -263,14 +416,14 @@ Be accurate, polite, and grounded in the real policies. {context}"""
     ) -> Tuple[str, List[Dict], float, int, List[Tuple[str, float, str]]]:
         """Refresh the assistant response with a grounded prompt and recompute grounding."""
         if not retrieved_docs:
-            response_text, tokens_with_logprobs = self._stream_llm_response(messages)
+            response_text, tokens_with_logprobs, _ = self._stream_llm_response(messages)
             refreshed_grounding = self._compute_grounding(response_text, retrieved_docs)
             refreshed_hallucinated = 1 if refreshed_grounding < 0.4 else 0
             return response_text, tokens_with_logprobs, refreshed_grounding, refreshed_hallucinated, retrieved_docs
 
         system_prompt = self._build_refreshed_system_prompt(issue_type, persona, retrieved_docs)
         full_messages = [{"role": "system", "content": system_prompt}] + messages
-        response_text, tokens_with_logprobs = self._stream_llm_response(full_messages)
+        response_text, tokens_with_logprobs, _ = self._stream_llm_response(full_messages)
 
         # Recompute grounding for the refreshed response
         refreshed_query = f"{messages[-1]['content']} {response_text}"
